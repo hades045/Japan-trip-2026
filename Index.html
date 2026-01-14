@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日光紅葉自駕之旅 | 行程表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8F5F2; /* 淡淡的米色，日系感 */
+        }
+        .autumn-red { color: #B22222; }
+        .autumn-bg { background-color: #B22222; }
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #E5E7EB;
+        }
+        .tab-active {
+            border-bottom: 3px solid #B22222;
+            color: #B22222;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- Header -->
+    <header class="autumn-bg text-white p-6 shadow-lg sticky top-0 z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">日光紅葉自駕</h1>
+                <p class="text-sm opacity-90">10/29 - 11/02 · 宇都宮-日光</p>
+            </div>
+            <i data-lucide="map" class="w-8 h-8"></i>
+        </div>
+    </header>
+
+    <!-- Day Navigation -->
+    <nav class="bg-white shadow-sm sticky top-[80px] z-40">
+        <div class="max-w-md mx-auto flex justify-around overflow-x-auto py-3 px-2">
+            <button onclick="showDay(1)" id="btn-day1" class="day-tab px-3 py-1 text-sm tab-active">D1</button>
+            <button onclick="showDay(2)" id="btn-day2" class="day-tab px-3 py-1 text-sm">D2</button>
+            <button onclick="showDay(3)" id="btn-day3" class="day-tab px-3 py-1 text-sm">D3</button>
+            <button onclick="showDay(4)" id="btn-day4" class="day-tab px-3 py-1 text-sm">D4</button>
+            <button onclick="showDay(5)" id="btn-day5" class="day-tab px-3 py-1 text-sm">D5</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-md mx-auto mt-6 px-4">
+        
+        <!-- Day 1 -->
+        <div id="day1" class="day-content">
+            <div class="flex items-center mb-4">
+                <i data-lucide="calendar" class="w-5 h-5 autumn-red mr-2"></i>
+                <h2 class="text-xl font-bold text-gray-800">10/29 抵達東京</h2>
+            </div>
+            <div class="relative pl-10">
+                <div class="timeline-line"></div>
+                <!-- Card -->
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="home" class="w-4 h-4 text-gray-400"></i>
+                    </div>
+                    <span class="text-xs font-bold autumn-red">下午</span>
+                    <h3 class="font-bold text-lg">抵達東京</h3>
+                    <p class="text-gray-600 text-sm">辦理飯店入住，市區輕鬆逛，儲備體力。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div id="day2" class="day-content hidden">
+            <div class="flex items-center mb-4">
+                <i data-lucide="calendar" class="w-5 h-5 autumn-red mr-2"></i>
+                <h2 class="text-xl font-bold text-gray-800">10/30 宇都宮與益子陶藝</h2>
+            </div>
+            <div class="relative pl-10">
+                <div class="timeline-line"></div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="train" class="w-4 h-4 text-blue-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">09:00</span>
+                    <h3 class="font-bold text-lg text-gray-700">前往宇都宮</h3>
+                    <p class="text-gray-600 text-sm">搭乘新幹線或 JR 線 (約 50 分鐘)。</p>
+                </div>
+
+                <div class="bg-red-50 border border-red-200 p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-red-500">
+                        <i data-lucide="car" class="w-4 h-4 text-red-500"></i>
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-bold text-red-500">10:30 重要提醒</span>
+                            <h3 class="font-bold text-lg text-red-900">宇都宮站取車</h3>
+                        </div>
+                        <span class="bg-red-500 text-white text-[10px] px-2 py-1 rounded">必辦事項</span>
+                    </div>
+                    <p class="text-red-700 text-sm mt-1">檢查車況、確認輪胎、行李入車。</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="camera" class="w-4 h-4 text-orange-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">12:00</span>
+                    <h3 class="font-bold text-lg">益子町巡禮</h3>
+                    <p class="text-gray-600 text-sm">益子燒窯元共販中心，享受陶藝氛圍與文青選物。</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="utensils" class="w-4 h-4 text-green-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">19:00</span>
+                    <h3 class="font-bold text-lg">晚餐：宇都宮餃子</h3>
+                    <p class="text-gray-600 text-sm">推薦名店：みんみん(Minmin) 或 正嗣。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div id="day3" class="day-content hidden">
+            <div class="flex items-center mb-4">
+                <i data-lucide="calendar" class="w-5 h-5 autumn-red mr-2"></i>
+                <h2 class="text-xl font-bold text-gray-800">10/31 二社一寺與塞車預警</h2>
+            </div>
+            <div class="relative pl-10">
+                <div class="timeline-line"></div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="camera" class="w-4 h-4 text-orange-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">09:00</span>
+                    <h3 class="font-bold text-lg">日光兩社一寺</h3>
+                    <p class="text-gray-600 text-sm">東照宮、輪王寺、二荒山神社。世界遺產巡禮。</p>
+                </div>
+
+                <div class="bg-orange-50 border border-orange-200 p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-orange-500">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-orange-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-orange-600">13:00 注意</span>
+                    <h3 class="font-bold text-lg text-orange-900">挑戰伊羅哈坂 (Irohazaka)</h3>
+                    <p class="text-orange-700 text-sm">⚠️ 紅葉季極度塞車路段。建議避開尖峰或預留 2 小時。</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="mountain" class="w-4 h-4 text-indigo-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">15:00</span>
+                    <h3 class="font-bold text-lg text-gray-700">明智平纜車</h3>
+                    <p class="text-gray-600 text-sm">眺望華嚴瀑布與中禪寺湖全景。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div id="day4" class="day-content hidden">
+            <div class="flex items-center mb-4">
+                <i data-lucide="calendar" class="w-5 h-5 autumn-red mr-2"></i>
+                <h2 class="text-xl font-bold text-gray-800">11/01 奧日光紅葉秘境</h2>
+            </div>
+            <div class="relative pl-10">
+                <div class="timeline-line"></div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative border-l-4 border-yellow-400">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="star" class="w-4 h-4 text-yellow-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">13:30 秘境</span>
+                    <h3 class="font-bold text-lg">半月山展望台</h3>
+                    <p class="text-gray-600 text-sm">⭐ 攝影師最愛：俯瞰八丁出島紅葉全景，開車族專屬點。</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="waves" class="w-4 h-4 text-blue-400"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">15:30</span>
+                    <h3 class="font-bold text-lg">華嚴瀑布</h3>
+                    <p class="text-gray-600 text-sm">日本三大名瀑之一，秋季搭配紅葉絕美。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div id="day5" class="day-content hidden">
+            <div class="flex items-center mb-4">
+                <i data-lucide="calendar" class="w-5 h-5 autumn-red mr-2"></i>
+                <h2 class="text-xl font-bold text-gray-800">11/02 還車與回程</h2>
+            </div>
+            <div class="relative pl-10">
+                <div class="timeline-line"></div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">14:30</span>
+                    <h3 class="font-bold text-lg">宇都宮還車</h3>
+                    <p class="text-gray-600 text-sm">記得加滿油！檢查車內所有物品是否帶齊。</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-4 relative">
+                    <div class="absolute -left-[30px] bg-white p-1 rounded-full border-2 border-gray-200">
+                        <i data-lucide="train" class="w-4 h-4 text-blue-500"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400">16:00</span>
+                    <h3 class="font-bold text-lg">返回東京</h3>
+                    <p class="text-gray-600 text-sm">搭乘新幹線，結束精彩的栃木紅葉之旅。</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Stats -->
+    <footer class="max-w-md mx-auto px-4 mt-8">
+        <div class="bg-gray-800 text-white p-4 rounded-2xl flex justify-between items-center shadow-lg">
+            <div class="text-center flex-1">
+                <p class="text-[10px] uppercase opacity-60">車程總計</p>
+                <p class="font-bold">約 180km</p>
+            </div>
+            <div class="w-px h-8 bg-gray-600"></div>
+            <div class="text-center flex-1">
+                <p class="text-[10px] uppercase opacity-60">最高海拔</p>
+                <p class="font-bold">1,475m</p>
+            </div>
+            <div class="w-px h-8 bg-gray-600"></div>
+            <div class="text-center flex-1">
+                <p class="text-[10px] uppercase opacity-60">預計氣溫</p>
+                <p class="font-bold">2°C - 15°C</p>
+            </div>
+        </div>
+        <p class="text-center text-gray-400 text-[10px] mt-4">Made for Nikko Trip 2024</p>
+    </footer>
+
+    <script>
+        // 初始化圖示
+        lucide.createIcons();
+
+        // 切換天數邏輯
+        function showDay(dayNumber) {
+            // 隱藏所有內容
+            document.querySelectorAll('.day-content').forEach(day => {
+                day.classList.add('hidden');
+            });
+            // 移除所有 Tab 樣式
+            document.querySelectorAll('.day-tab').forEach(tab => {
+                tab.classList.remove('tab-active');
+            });
+
+            // 顯示選擇的天數
+            document.getElementById('day' + dayNumber).classList.remove('hidden');
+            // 加上選中樣式
+            document.getElementById('btn-day' + dayNumber).classList.add('tab-active');
+
+            // 滾動回頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
