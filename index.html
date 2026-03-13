@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>京神旅行</title>
+    <!-- 使用 Tailwind CSS 加速開發與響應式設計 -->
+    <style>
+        :root {
+            --primary: #d35400;
+            --secondary: #f39c12;
+            --bg: #fdfaf6;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --accent: #3498db;
+            --map-btn: #4285F4;
+            --warning: #e74c3c;
+            --taxi: #27ae60;
+            --kobe: #2980b9;
+            --shop: #8e44ad;
+            --checklist-bg: #fffbf0;
+            --flight-bg: #ebf5ff;
+        }
+        body {
+            font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            background: #fff;
+            overflow-x: auto;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 87px; 
+            z-index: 99;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: #95a5a6;
+            cursor: pointer;
+            min-width: 85px;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        .content {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--secondary);
+        }
+        .card.start-point { border-left-color: #27ae60; }
+        .card.hotel-card { border-left-color: #34495e; }
+        .card.sento-card { border-left-color: #9b59b6; }
+        .card.checklist-card { border-left-color: var(--warning); background-color: var(--checklist-bg); }
+        .card.flight-card { border-left-color: var(--accent); background-color: var(--flight-bg); }
+        
+        .time {
+            font-size: 0.85em;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .desc {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .transport-box {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.88em;
+            margin-top: 12px;
+            color: #34495e;
+            border: 1px solid #d6eaf8;
+            line-height: 1.6;
+        }
+        .transport-box b { color: var(--accent); }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: white;
+            color: var(--map-btn);
+            border: 1.5px solid var(--map-btn);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .map-btn:active {
+            background-color: var(--map-btn);
+            color: white;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0e6d2;
+        }
+        .check-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
+        .warning-tag {
+            background: #fff5f5;
+            color: #e74c3c;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+            border: 1px solid #ffcdd2;
+        }
+        .taxi-note {
+            background: #eef9f1;
+            color: var(--taxi);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+            border: 1px solid #c8e6c9;
+        }
+        .shop-tag {
+            background: #f5f0ff;
+            color: var(--shop);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border: 1px solid #e0d4f7;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .shop-item { padding: 12px 0; border-bottom: 1px dashed #eee; }
+        .shop-item:last-child { border-bottom: none; }
+        .hotel-info-box {
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2 style="margin:0;">🌸 京神旅行全記錄</h2>
+    <p style="margin:5px 0 0 0; font-size: 0.85em; opacity: 0.9;">2026 行程日誌</p>
+</div>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="switchDay(0)">📋 準備</button>
+    <button class="tab-btn" onclick="switchDay(1)">3/17 D1</button>
+    <button class="tab-btn" onclick="switchDay(2)">3/18 D2</button>
+    <button class="tab-btn" onclick="switchDay(3)">3/19 D3</button>
+    <button class="tab-btn" onclick="switchDay(4)">3/20 D4</button>
+</div>
+
+<!-- Day 0: Checklist -->
+<div id="day0" class="content">
+    <div class="card checklist-card">
+        <div class="time">BEFORE DEPARTURE</div>
+        <span class="title">📋 登機前準備清單</span>
+        <div class="check-list">
+            <div class="check-item"><input type="checkbox" id="c1"><label for="c1">KKday 大阪-京都 Haruka 車票</label></div>
+            <div class="check-item"><input type="checkbox" id="c2"><label for="c2">預訂京都飯店 (TSUGU 京都三條)</label></div>
+            <div class="check-item"><input type="checkbox" id="c3"><label for="c3">投保旅平險</label></div>
+            <div class="check-item"><input type="checkbox" id="c4"><label for="c4">預約壽喜燒 (Moritaya 木屋町店)</label></div>
+            <div class="check-item"><input type="checkbox" id="c5"><label for="c5">氣泡布、膠帶、小剪刀 (打包名產)</label></div>
+            <div class="check-item"><input type="checkbox" id="c6"><label for="c6">夾鏈袋 (裝一夜干/味噌)</label></div>
+            <div class="check-item"><input type="checkbox" id="c7"><label for="c7">購買網路 (eSIM/WiFi)</label></div>
+        </div>
+    </div>
+</div>
+
+<!-- Day 1: 3/17 -->
+<div id="day1" class="content" style="display:none;">
+    <div class="card flight-card">
+        <div class="time">05:40 GATHERING</div>
+        <span class="title">✈️ 航班：JX820 (星宇航空)</span>
+        <div class="desc">
+            <span class="warning-tag">📍 TPE 第一航廈 6 號櫃檯見</span><br>
+            • <b>05:40</b> 集合報到 | <b>07:40</b> 起飛<br>
+            • <b>11:10</b> 抵達關西機場 (KIX)
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="time">12:14 / 12:44 TRANSPORT</div>
+        <span class="title">🚆 Haruka 特急 (KIX → 京都)</span>
+        <div class="transport-box">
+            <b>交通建議：</b><br>
+            1. 抵達後前往 2F 的 JR 櫃檯兌換票券。<br>
+            2. 建議搭乘 <b>12:14 (22號)</b> 或 <b>12:44 (24號)</b> 列車。<br>
+            3. 車程約 80 分鐘直達京都車站。
+        </div>
+        <div class="button-group">
+            <a href="https://www.westjr.co.jp/global/tc/timetable/" target="_blank" class="map-btn">🕒 時刻表查詢</a>
+        </div>
+    </div>
+
+    <div class="card hotel-card">
+        <div class="time">14:30 ARRIVAL</div>
+        <span class="title">🏨 京都車站 → 飯店 Check-in</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            • <b>地鐵：</b>搭乘烏丸線往國際會館方向，在「烏丸御池」下車，由 5 號出口步行 5 分。<br>
+            • <b>計程車：</b>於北口搭乘，約 15 分鐘 (車資約 1,300円)。
+        </div>
+        <div class="hotel-info-box">
+            <b>TSUGU Kyoto Sanjo by THE SHARE HOTELS</b><br>
+            英文地址：75 Masuyacho, Nakagyo Ward, Kyoto, 604-8111<br>
+            飯店電話：+81 75-213-2900
+        </div>
+        <div class="button-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=TSUGU+Kyoto+Sanjo" target="_blank" class="map-btn">📍 飯店位置導航</a>
+        </div>
+    </div>
+
+    <div class="card start-point">
+        <div class="time">📍 第一站 (起點)</div>
+        <span class="title">🍵 一保堂茶舖 (本店)</span>
+        <div class="desc"><span class="warning-tag">⚠️ 16:30 最後點餐 (內用)</span></div>
+        <div class="transport-box">
+            <b>交通建議：</b><br>
+            飯店出發步行約 10 分鐘。由三條通左轉寺町通直行即可抵達。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=一保堂茶舖+本店" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+
+    <div class="card">
+        <div class="time">SHOPPING</div>
+        <span class="title">🛍️ 三條通與寺町通區域</span>
+        <div class="desc">一保堂步行出發，沿著寺町通往南逛：</div>
+        <div class="shop-list">
+            <div class="shop-item"><b>👓 金子眼鏡店 (京都寺町店)</b> <a href="https://www.google.com/maps/search/?api=1&query=金子眼鏡店+京都寺町店" target="_blank" class="map-btn">📍 地圖</a></div>
+            <div class="shop-item"><b>🍯 柚子味增 八百三</b> <a href="https://www.google.com/maps/search/?api=1&query=八百三" target="_blank" class="map-btn">📍 地圖</a></div>
+            <div class="shop-item"><b>🦋 皆川明 (minä perhonen)</b> <a href="https://www.google.com/maps/search/?api=1&query=minä+perhonen+kyoto" target="_blank" class="map-btn">📍 地圖</a></div>
+            <div class="shop-item"><b>🏢 京都 BAL (MUJI/UNIQLO/薰玉堂)</b> <a href="https://www.google.com/maps/search/?api=1&query=Kyoto+BAL" target="_blank" class="map-btn">📍 地圖</a></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="time">DINNER</div>
+        <span class="title">🍱 晚餐：隨意吃</span>
+        <div class="transport-box">
+            <b>建議：</b>河原町或先斗町一帶步行回飯店僅需 5-10 分鐘。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=京都三条+レストラン" target="_blank" class="map-btn">🍴 附近美食</a></div>
+    </div>
+</div>
+
+<!-- Day 2: 3/18 -->
+<div id="day2" class="content" style="display:none;">
+    <div class="card">
+        <div class="time">MORNING</div>
+        <span class="title">☕ Smart Coffee (早餐)</span>
+        <div class="transport-box"><b>交通：</b>飯店步行約 5 分鐘。</div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=Smart+Coffee+Kyoto" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+
+    <div class="card">
+        <div class="time">10:40 - 12:00</div>
+        <span class="title">🌸 淀之河津櫻</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            1. 步行至京阪<b>「三条」</b>站。<br>
+            2. 搭乘京阪本線 (往淀屋橋方向) 到<b>「淀」</b>站下車。<br>
+            3. 出站步行約 10 分抵達賞櫻處。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=淀の河津桜" target="_blank" class="map-btn">📍 賞櫻導航</a></div>
+    </div>
+
+    <div class="card">
+        <div class="time">13:00 - 14:00</div>
+        <span class="title">🦆 鴨川跳烏龜石 & 豆大福</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            由京阪「淀」站搭車往出町柳方向，終點<b>「出町柳」</b>站下車即達。
+        </div>
+        <div class="button-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=鴨川デル塔" target="_blank" class="map-btn">📍 跳烏龜</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=出町ふたば" target="_blank" class="map-btn">🍡 豆大福地圖</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="time">15:00 - 17:00</div>
+        <span class="title">🖼️ 京瓷美術館</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            1. 由出町柳步行至<b>「三条京阪」</b>巴士站。<br>
+            2. 搭乘 <b>市巴士 5 號</b> 到「岡崎公園 美術館・平安神宮前」。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=京都市京セラ美術館" target="_blank" class="map-btn">📍 地圖導覽</a></div>
+    </div>
+
+    <div class="card">
+        <div class="time">18:00 DINNER</div>
+        <span class="title">🥩 晚餐：森田屋壽喜燒</span>
+        <div class="transport-box"><b>建議：</b>搭巴士回到三條區域後步行抵達。</div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=モリタ屋+木屋町店" target="_blank" class="map-btn">📍 餐廳導航</a></div>
+    </div>
+
+    <div class="card sento-card">
+        <div class="time">NIGHT</div>
+        <span class="title">♨️ 梅湯 (錢湯體驗)</span>
+        <div class="taxi-note">🚕 交通：回飯店稍作休息後，建議搭乘 <b>計程車</b> 前往。</div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=サウナの梅湯" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+</div>
+
+<!-- Day 3: 3/19 -->
+<div id="day3" class="content" style="display:none;">
+    <div class="card start-point">
+        <div class="time">09:30 APPOINTMENT</div>
+        <span class="title">🌿 西芳寺 (苔寺)</span>
+        <div class="desc"><span class="warning-tag">⚠️ 08:20 飯店出發，請務必準時</span></div>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            1. 步行至<b>「四條烏丸」</b>巴士站。<br>
+            2. 搭乘 <b>京都巴士 73 號</b> 到「苔寺・鈴蟲寺」下車 (約 45 分)。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=西芳寺" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+
+    <div class="card">
+        <div class="time">15:00 APPOINTMENT</div>
+        <span class="title">🏯 桂離宮</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            搭乘 <b>市巴士 33 號</b> (約 20 分)。若巴士時間不合，建議搭 <b>計程車</b> (約 10-15 分)。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=桂離宮" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+
+    <div class="card">
+        <div class="time">DINNER & SHOP</div>
+        <span class="title">🍽️ 晚餐：Snn</span>
+        <span class="shop-tag">🛍️ 附近：倉日用商店</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            由桂離宮步行至 <b>阪急「桂」站</b>，搭乘阪急京都線回 <b>「京都河原町」</b>。
+        </div>
+        <div class="button-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Snn+Kyoto" target="_blank" class="map-btn">📍 Snn 導航</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=倉日用商店" target="_blank" class="map-btn">🛍️ 倉日用商店</a>
+        </div>
+    </div>
+
+    <div class="card hotel-card">
+        <div class="time">20:30 MOVE</div>
+        <span class="title">⚓ 前往神戶三宮</span>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            阪急京都線 (河原町/烏丸站) 搭特急至<b>「十三站」</b>轉神戶線到<b>「神戶三宮」</b>。
+        </div>
+    </div>
+</div>
+
+<!-- Day 4: 3/20 -->
+<div id="day4" class="content" style="display:none;">
+    <div class="card">
+        <div class="time">08:00 MORNING</div>
+        <span class="title">☕ 早餐：DORSIA</span>
+        <div class="transport-box"><b>交通：</b>神戶三宮站步行約 8-10 分鐘。</div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=DORSIA+Kobe" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+
+    <!-- 主班次 -->
+    <div class="card flight-card">
+        <div class="time">12:00 AIRPORT</div>
+        <span class="title">✈️ 航班：JX307 (UKB → RMQ)</span>
+        <div class="desc"><span class="warning-tag">📍 13:30 起飛 | 12:00 須到機場</span></div>
+        <div class="transport-box">
+            <b>交通方式：</b><br>
+            由「三宮站」搭乘 <b>Port Liner (神戶新交通)</b> 到終點「神戶空港」。
+        </div>
+        <div class="button-group"><a href="https://www.google.com/maps/search/?api=1&query=神戸空港" target="_blank" class="map-btn">📍 導航</a></div>
+    </div>
+
+    <!-- 備選班次 -->
+    <div class="card" style="border-left-color: #95a5a6; opacity: 0.9;">
+        <div class="time">ALTERNATIVES</div>
+        <span class="title">🔄 關西機場回程 (KIX)</span>
+        <div class="desc">若從 KIX 出發之備案：</div>
+        <div class="hotel-info-box">
+            • JX821 KIX-TPE (12:20 - 14:35)<br>
+            • JX823 KIX-TPE (14:00 - 16:15)
+        </div>
+        <div class="transport-box">
+            <b>注意：</b>由神戶三宮前往關西機場約需 60-70 分鐘 (可搭利木津巴士或高速船)。
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchDay(dayNumber) {
+        document.querySelectorAll('.content').forEach(el => el.style.display = 'none');
+        document.getElementById('day' + dayNumber).style.display = 'block';
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        const activeTab = document.querySelectorAll('.tab-btn')[dayNumber];
+        if(activeTab) activeTab.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+    // Checklist
+    document.querySelectorAll('input[type="checkbox"]').forEach(item => {
+        item.addEventListener('change', function() {
+            this.nextElementSibling.style.textDecoration = this.checked ? 'line-through' : 'none';
+            this.nextElementSibling.style.opacity = this.checked ? '0.5' : '1';
+        });
+    });
+</script>
+
+</body>
+</html>
+
