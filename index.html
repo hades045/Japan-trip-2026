@@ -40,8 +40,8 @@
             background: var(--primary);
             color: white;
             text-align: center;
-            /* 關鍵修復：加大安全區域補償（45px），確保完全避開動態島 */
-            padding: calc(45px + env(safe-area-inset-top)) 0 20px 0;
+            /* 修復：將原本過大的 45px 縮小至 10px，讓標題與靈動島保持更自然的距離 */
+            padding: calc(10px + env(safe-area-inset-top)) 0 20px 0;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -67,8 +67,8 @@
             overflow-x: auto;
             border-bottom: 1px solid #eee;
             position: sticky;
-            /* 關鍵修復：根據新的 Header 高度調整 Tabs 的頂部停駐位置 */
-            top: calc(125px + env(safe-area-inset-top)); 
+            /* 修復：配合 Header 高度縮減，同步調整 Tabs 的頂部停駐位置 (原 125px -> 90px) */
+            top: calc(90px + env(safe-area-inset-top)); 
             z-index: 99;
         }
         .tabs::-webkit-scrollbar { display: none; }
